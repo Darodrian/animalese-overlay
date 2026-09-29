@@ -1,0 +1,16 @@
+{
+  "name": "animalese-overlay",
+  "version": "0.1.0",
+  "description": "OBS overlay that speaks Twitch chat messages in Animal Crossing animalese",
+  "scripts": {
+    "start": "node server.js",
+    "setup": "node scripts/setup.js",
+    "refresh": "node scripts/refresh-villagers.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "animalese-tts": "^1.1.3",
+    "comfy.js": "^1.1.29",
+    "express": "^5.2.1"
+  }
+}

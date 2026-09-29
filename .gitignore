@@ -1,0 +1,14 @@
+node_modules/
+
+# Local settings, not yours to commit
+data/config.json
+
+# Cached villager data, rebuild with "npm run refresh"
+data/villagers.json
+
+# Vendored audio sprite, re-fetch with "npm run setup".
+# Game audio, so definitely do not commit it.
+public/sounds/
+
+*.log
+.DS_Store

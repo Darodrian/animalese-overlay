@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Animalese Overlay &mdash; control</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --line: #2f2925;
+        --bg: #171412;
+        --panel: #1f1b18;
+        --accent: #f0c674;
+        --good: #7ec699;
+        --bad: #e0736a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 1.6rem;
+        background: #0f0d0c;
+        color: #f4efe6;
+        font: 14px/1.55 ui-sans-serif, system-ui, sans-serif;
+      }
+      h1 {
+        font-size: 1.25rem;
+        margin: 0;
+      }
+      h2 {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: var(--accent);
+        margin: 0 0 0.9rem;
+      }
+      p.sub {
+        margin: 0.2rem 0 1.4rem;
+        color: #a89c8c;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+        gap: 1rem;
+        align-items: start;
+      }
+      section {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 1rem 1.15rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.87rem;
+      }
+      td {
+        padding: 0.22rem 0.4rem 0.22rem 0;
+        vertical-align: top;
+      }
+      td.k {
+        color: #a89c8c;
+        white-space: nowrap;
+        width: 42%;
+      }
+      .val {
+        font-family: ui-monospace, Consolas, monospace;
+        word-break: break-word;
+      }
+      .good {
+        color: var(--good);
+        font-weight: 700;
+      }
+      .bad {
+        color: var(--bad);
+        font-weight: 700;
+      }
+      .warn {
+        color: var(--accent);
+        font-weight: 700;
+      }
+      input,
+      select {
+        width: 100%;
+        min-width: 0;
+        background: #0c0a09;
+        border: 1px solid #3d3630;
+        color: #f4efe6;
+        border-radius: 8px;
+        padding: 0.5rem 0.6rem;
+        font: inherit;
+      }
+      label.chk {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.16rem 0;
+        cursor: pointer;
+      }
+      label.chk input {
+        width: auto;
+      }
+      button {
+        background: #2d2723;
+        border: 1px solid #463d36;
+        color: #f4efe6;
+        border-radius: 8px;
+        padding: 0.48rem 0.9rem;
+        font: inherit;
+        cursor: pointer;
+      }
+      button:hover:not(:disabled) {
+        background: #3a332d;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+      .row {
+        display: flex;
+        gap: 0.45rem;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-top: 0.7rem;
+      }
+      .field {
+        margin-bottom: 0.65rem;
+      }
+      .field > span {
+        display: block;
+        font-size: 0.78rem;
+        color: #a89c8c;
+        margin-bottom: 0.2rem;
+      }
+      #note {
+        margin-top: 0.7rem;
+        font-size: 0.83rem;
+        color: #a89c8c;
+        min-height: 1.2em;
+      }
+      a {
+        color: var(--accent);
+      }
+      ol {
+        margin: 0.4rem 0 0;
+        padding-left: 1.2rem;
+        color: #a89c8c;
+        font-size: 0.87rem;
+      }
+      ol code {
+        color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Animalese Overlay &mdash; control</h1>
+
+    <div class="grid">
+      <section>
+        <h2>Status</h2>
+        <table>
+          <tr>
+            <td class="k">Overlay clients</td>
+            <td class="val" id="sOverlays">&ndash;</td>
+          </tr>
+          <tr>
+            <td class="k">Audio context</td>
+            <td class="val" id="sAudio">&ndash;</td>
+          </tr>
+          <tr>
+            <td class="k">Queue</td>
+            <td class="val" id="sQueue">&ndash;</td>
+          </tr>
+        </table>
+      </section>
+
+      <section>
+        <h2>Say something</h2>
+        <div class="field">
+          <span>Villager</span>
+          <select id="cVillager">
+            <option value="">Random</option>
+          </select>
+        </div>
+        <div class="field">
+          <span>Message (empty = that villager's catchphrase)</span>
+          <input id="cMessage" placeholder="welcome to the island" />
+        </div>
+        <div class="row">
+          <button id="cSay">Send to overlay</button>
+        </div>
+        <div id="sayNote"></div>
+      </section>
+
+      <section>
+        <h2>Chat command</h2>
+        <table>
+          <tr>
+            <td class="k">Prefix</td>
+            <td class="val" id="cPrefix">&ndash;</td>
+          </tr>
+          <tr>
+            <td class="k">Cooldown</td>
+            <td class="val" id="cCooldown">&ndash;</td>
+          </tr>
+          <tr>
+            <td class="k">Max length</td>
+            <td class="val" id="cMaxLen">&ndash;</td>
+          </tr>
+        </table>
+        <ol>
+          <li><code>!ac hello</code> &mdash; random villager</li>
+          <li><code>!ac Ribbot hello</code> &mdash; Ribbot specifically</li>
+          <li><code>!ac</code> &mdash; random villager's catchphrase</li>
+        </ol>
+        <p class="sub" style="margin: 0.7rem 0 0">
+          In OBS, add a Browser Source and set its URL to
+          <code>/overlay?channel=yourusername</code> (swap <code>yourusername</code> for
+          your Twitch channel). Then 1280&times;720, 60&nbsp;fps, tick
+          <strong>Control audio via OBS</strong>, then Audio&nbsp;Mixer &rarr; Browser&nbsp;Source &rarr;
+          Monitor&nbsp;=&nbsp;<strong>Monitor</strong>.
+        </p>
+      </section>
+
+      <section>
+        <h2>Permissions &amp; limits</h2>
+        <label class="chk"><input type="checkbox" data-perm="broadcaster" /> Broadcaster</label>
+        <label class="chk"><input type="checkbox" data-perm="mod" /> Mods</label>
+        <label class="chk"><input type="checkbox" data-perm="vip" /> VIPs</label>
+        <label class="chk"><input type="checkbox" data-perm="subscriber" /> Subscribers</label>
+
+        <div class="field" style="margin-top: 0.9rem">
+          <span>User cooldown (s)</span>
+          <input id="vCooldown" type="number" min="0" step="5" />
+        </div>
+
+        <div class="field" style="margin-top: 0.6rem">
+          <span>Max message length (chars)</span>
+          <input id="vMaxLen" type="number" min="1" max="500" step="1" />
+        </div>
+
+        <div class="row">
+          <button id="save">Save settings</button>
+        </div>
+        <div id="saveNote"></div>
+      </section>
+    </div>
+
+    <script type="module" src="/js/control.js"></script>
+  </body>
+</html>
