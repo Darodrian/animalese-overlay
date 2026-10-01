@@ -1,0 +1,16 @@
+{
+  "placeholderChannel": "yourusername",
+  "command": {
+    "prefix": "ac",
+    "maxLength": 500,
+    "userCooldownMs": 0,
+    "minGapMs": 1200
+  },
+  "permissions": {
+    "broadcaster": true,
+    "mod": true,
+    "vip": true,
+    "subscriber": true
+  },
+  "requirePortrait": true
+}

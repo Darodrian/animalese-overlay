@@ -1,7 +1,10 @@
 node_modules/
 
-# Local settings, not yours to commit
-data/config.json
+# Note: data/config.json IS committed on purpose. It holds the deployed
+# defaults (prefix, cooldowns, permissions). There are no secrets in it:
+# Twitch credentials never reach the server, chat runs in the browser.
+# Edits made via the control UI land on disk at runtime but are lost when an
+# ephemeral host redeploys or spins down.
 
 # Cached villager data, rebuild with "npm run refresh"
 data/villagers.json
