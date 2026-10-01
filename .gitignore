@@ -6,8 +6,12 @@ node_modules/
 # Edits made via the control UI land on disk at runtime but are lost when an
 # ephemeral host redeploys or spins down.
 
-# Cached villager data, rebuild with "npm run refresh"
-data/villagers.json
+# Note: data/villagers.json IS committed on purpose. It is the villager roster
+# the app deploys with, so builds do not have to reach Nookipedia (which blocks
+# some datacenter IP ranges with HTTP 403). It is CC BY-SA text data, contains
+# no Nintendo assets, and only stores image URLs rather than images themselves.
+# Rebuild it locally with "npm run refresh" and commit the result when you want
+# current data.
 
 # Vendored audio sprite, re-fetch with "npm run setup".
 # Game audio, so definitely do not commit it.
