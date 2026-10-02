@@ -3,8 +3,6 @@
 An OBS browser source that picks a random Animal Crossing villager and speaks
 Twitch chat messages in their voice.
 
----
-
 ## OBS setup
 
 1. Add a **Browser** source, set its URL to
@@ -13,8 +11,6 @@ Twitch chat messages in their voice.
 2. Then 1280×720, 60 fps.
 3. Tick **Control audio via OBS**.
 4. Audio Mixer → Browser Source → Monitor = **Monitor**.
-
----
 
 ## Credits and licensing
 
