@@ -1,30 +1,43 @@
-# Animalese Overlay
+# animalese-overlay
 
-An OBS browser source that picks a random Animal Crossing villager and speaks
-Twitch chat messages in their voice.
+A text-to-speech chat bot that drops a random Animal Crossing villager into your
+stream and reads chat messages in their voice.
+
+## Chat commands
+
+| Command | Result |
+| --- | --- |
+| `!ac hello` | a random villager says it |
+| `!ac Ribbot hello` | Ribbot says it |
+| `!ac` | a random villager's catchphrase |
+
+These commands don't need to be registered with any chatbot. They start working
+as soon as the OBS browser source is added.
+
+## Control panel
+
+Open [the home page](https://animalese-overlay.onrender.com/) in a browser to
+reach the control panel. It shows whether an overlay is connected and whether
+audio is running, lets you send a line to a villager you pick, and holds the
+settings for who may use the chat command, the per-user cooldown, and the
+maximum message length.
 
 ## OBS setup
 
-1. Add a **Browser** source, set its URL to
-   `/overlay?channel=yourusername`, and swap
-   `yourusername` for your Twitch channel.
-2. Then 1280×720, 60 fps.
-3. Tick **Control audio via OBS**.
-4. Audio Mixer → Browser Source → Monitor = **Monitor**.
+1. In OBS, add a **Browser** source.
+2. Set the URL to
+   `https://animalese-overlay.onrender.com/overlay.html?channel=yourusername`,
+   swapping in your own channel name. Without `?channel=` the overlay won't
+   read chat.
+3. Set width to 1280, height to 720, framerate to 60.
+4. Tick **Control audio via OBS**.
+5. Open the Audio Mixer, right-click the browser source, and set monitoring to
+   **Monitor and Output**.
 
-## Credits and licensing
+## Credits
 
-- **Animal Crossing audio.** `public/sounds/english-sprite.wav` is Nintendo
-  property. It is downloaded at build time from
-  [`animalese-tts`](https://github.com/izure1/animalese-tts) and is not
-  committed to this repository or redistributed by it.
-- **`animalese-tts`** is MIT licensed, copyright izure.
-- **Villager data** comes from
-  [Nookipedia](https://nookipedia.com/wiki/Nookipedia:General_disclaimer).
-  Nookipedia's text content is licensed CC BY-SA 4.0 (CC BY-SA 3.0 for
-  content submitted before January 1, 2025). Villager names, phrases, and
-  other data are committed here in `data/villagers.json`. The file stores only
-  image *URLs* pointing back to Nookipedia; no images are redistributed.
+- [animalese-tts](https://github.com/izure1/animalese-tts)
+- [Nookipedia](https://nookipedia.com/wiki/Nookipedia)
 
 Not affiliated with or endorsed by Nintendo. Animal Crossing is a trademark of
 Nintendo.
