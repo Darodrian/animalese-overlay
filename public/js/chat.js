@@ -11,7 +11,8 @@ export function resolveChannel() {
 
 function allowedBy(flags, permissions) {
   return Boolean(
-    (flags.broadcaster && permissions.broadcaster) ||
+    permissions.everyone ||
+      (flags.broadcaster && permissions.broadcaster) ||
       (flags.mod && permissions.mod) ||
       (flags.vip && permissions.vip) ||
       (flags.subscriber && permissions.subscriber),
@@ -25,7 +26,7 @@ export function startChat({ prefix = 'ac', onCommand, onState }) {
     return;
   }
 
-  let permissions = { broadcaster: true, mod: true, vip: true, subscriber: true };
+  let permissions = { everyone: true, broadcaster: true, mod: true, vip: true, subscriber: true };
   fetch('/api/config')
     .then((r) => r.json())
     .then((c) => {
