@@ -383,7 +383,7 @@ async function onJob(job) {
 }
 
 // El retrato fallo: pide otro al aldeano sin retrato; si la cola lo rechaza,
-// cae al render sin retrato (el viejo fallback de /api/say con !ok).
+// cae al render sin retrato (el viejo fallback cuando el reemplazo no llega).
 function requestReplacement(job) {
   return enqueueSay({
     user: job.user,
