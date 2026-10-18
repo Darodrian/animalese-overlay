@@ -4,12 +4,15 @@ import {
   WebSampler,
   PitchManager,
   WebPlayer,
-} from '/vendor/animalese-tts.mjs';
+} from 'https://cdn.jsdelivr.net/npm/animalese-tts@1.1.3/dist/animalese.browser.mjs';
 
 import { drawVoice, DEFAULT_PUNCTUATIONS } from './voice.js';
 
-const SPRITE_WAV = '/sounds/english-sprite.wav';
-const SPRITE_MAP = '/sounds/english-sprite.json';
+// Sprite fijado a un commit concreto de izure1/animalese-tts (bytes validados en loadEngine).
+const SHA = 'befec7bb8545a7ecc2b72164cf9d04b6359a5f3f';
+const SPRITE_WAV = `https://raw.githubusercontent.com/izure1/animalese-tts/${SHA}/docs/sounds/english-sprite.wav`;
+const SPRITE_MAP = `https://raw.githubusercontent.com/izure1/animalese-tts/${SHA}/docs/sounds/english-sprite.json`;
+const SPRITE_WAV_BYTES = 1279244;
 
 class VoiceChain {
   constructor() {
@@ -61,7 +64,13 @@ export async function loadEngine() {
   loadPromise = (async () => {
     const map = await (await fetch(SPRITE_MAP)).json();
 
-    const sampler = new WebSampler(SPRITE_WAV, map);
+    const wav = await (await fetch(SPRITE_WAV)).blob();
+    if (wav.size !== SPRITE_WAV_BYTES) {
+      console.warn(`[animalese] sprite wav: ${wav.size} bytes, esperados ${SPRITE_WAV_BYTES}`);
+    }
+    const spriteUrl = URL.createObjectURL(wav);
+
+    const sampler = new WebSampler(spriteUrl, map);
     voiceChain = new VoiceChain();
     player = new WebPlayer();
 
@@ -171,8 +180,3 @@ export async function unlockAudio({ attempts = 40, intervalMs = 250 } = {}) {
   return probe.state;
 }
 
-export function reportState(extra = {}) {
-  const body = JSON.stringify({ page: location.pathname, audio: audioState(), ...extra });
-  if (navigator.sendBeacon) navigator.sendBeacon('/api/overlay-state', body);
-  else fetch('/api/overlay-state', { method: 'POST', body }).catch(() => {});
-}
