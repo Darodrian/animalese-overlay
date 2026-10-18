@@ -65,7 +65,8 @@ test('parseCommand allows a named no-portrait villager when not required', () =>
 });
 
 test('parseCommand with empty text uses the catchphrase', () => {
-  const parsed = parseCommand('', VILLAGERS, { ...CONFIG, requirePortrait: false });
+  const single = [{ name: 'Celeste', nameLower: 'celeste', phrase: 'frfr', quote: '', isPortrait: true }];
+  const parsed = parseCommand('', single, CONFIG);
   assert.equal(parsed.ok, true);
   assert.equal(parsed.job.message, 'frfr');
 });
