@@ -52,7 +52,7 @@ let bridge = null;
 let jobSeq = 0;
 
 const queue = createQueue({ minGapMs: 1200, onJob });
-try { console.log('[overlay] module init ok'); } catch(e) {}
+
 const { channel, key } = overlayParams(location.hash);
 if (!key) showSetup('missing-key');
 else if (!channel) showSetup('missing-channel');
@@ -104,7 +104,6 @@ function cacheSettings(channelName, settings) {
 
 
 async function boot(channelName, roomKey) {
-  try { console.log('[overlay] boot starting', channelName); } catch(e) {}
   live = mergeSettings(readCachedSettings(channelName));
   queue.setMinGap(live.minGapMs);
 
@@ -142,8 +141,7 @@ async function connectRoom(roomKey) {
     const b = createBridge(roomKey);
     b.onSet(({ settings }) => {
       live = mergeSettings(settings);
-  live = mergeSettings(readCachedSettings(channelName));
-  queue.setMinGap(live.minGapMs);
+      queue.setMinGap(live.minGapMs);
       cacheSettings(channel, live);
       console.log('[overlay] settings updated from dashboard');
     });
