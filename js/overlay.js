@@ -104,8 +104,8 @@ function cacheSettings(channelName, settings) {
 
 
 async function boot(channelName, roomKey) {
+  try { console.log('[overlay] boot starting', channelName); } catch(e) {}
   live = mergeSettings(readCachedSettings(channelName));
-  queue.setMinGap(live.minGapMs);
 
   await unlockAudio();
   loadEngine().catch((err) => console.error('[overlay] sprite load failed', err));
