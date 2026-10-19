@@ -85,6 +85,7 @@ export function overlayParams(hash) {
   return {
     channel: normChannel(params.get('c')),
     key: String(params.get('k') ?? '').trim(),
+    mute: params.get('mute') === '1',
   };
 }
 

@@ -5,6 +5,7 @@ import { sanitiseText, parseCommand, holdMsFor, createQueue } from './commands.j
 import { createBridge } from './bridge.js';
 import { startChat } from './chat.js';
 import { loadEngine, speak, unlockAudio, audioState, playerAudioState } from './tts.js';
+import { setMuted, isMuted } from './mute.js';
 
 const PLACEHOLDER_CHANNEL = 'yourusername';
 
@@ -53,12 +54,19 @@ let jobSeq = 0;
 
 const queue = createQueue({ minGapMs: 1200, onJob });
 
-const { channel, key } = overlayParams(location.hash);
+const { channel, key, mute } = overlayParams(location.hash);
+if (mute) setMuted(true);
 if (!key) showSetup('missing-key');
 else if (!channel) showSetup('missing-channel');
 else if (channel === PLACEHOLDER_CHANNEL) showSetup('placeholder');
 else if (!validateKey(key)) showSetup('invalid-key');
 else boot(channel, key);
+
+// El panel de control alterna el mute en vivo sin recargar el iframe.
+window.addEventListener('message', (event) => {
+  const data = event.data;
+  if (data && data.type === 'preview-mute') setMuted(data.muted);
+});
 
 // ---- ajustes en vivo ----
 
@@ -415,5 +423,7 @@ Object.assign(window, {
     say: (villagerName, text) =>
       enqueueSay({ user: 'control', text, flags: { broadcaster: true }, villagerName }),
     audio: audioState,
+    isMuted,
+    setMuted,
   },
 });

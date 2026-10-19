@@ -83,8 +83,14 @@ test('storage that throws never escapes the helpers', () => {
 });
 
 test('overlayParams parses the URL fragment', () => {
-  assert.deepEqual(overlayParams('#c=MyChan&k=abc'), { channel: 'mychan', key: 'abc' });
-  assert.deepEqual(overlayParams(''), { channel: '', key: '' });
+  assert.deepEqual(overlayParams('#c=MyChan&k=abc'), { channel: 'mychan', key: 'abc', mute: false });
+  assert.deepEqual(overlayParams(''), { channel: '', key: '', mute: false });
+});
+
+test('overlayParams reads mute=1 from the fragment', () => {
+  assert.equal(overlayParams('#c=a&k=b&mute=1').mute, true);
+  assert.equal(overlayParams('#c=a&k=b&mute=0').mute, false);
+  assert.equal(overlayParams('#c=a&k=b&mute=yes').mute, false);
 });
 
 test('adoptHashParams saves channel and key only when both are present', () => {

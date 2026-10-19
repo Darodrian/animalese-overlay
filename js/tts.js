@@ -7,6 +7,7 @@ import {
 } from 'https://cdn.jsdelivr.net/npm/animalese-tts@1.1.3/dist/animalese.browser.mjs';
 
 import { drawVoice, DEFAULT_PUNCTUATIONS } from './voice.js';
+import { isMuted } from './mute.js';
 
 // Sprite fijado a un commit concreto de izure1/animalese-tts (bytes validados en loadEngine).
 const SHA = 'befec7bb8545a7ecc2b72164cf9d04b6359a5f3f';
@@ -116,6 +117,9 @@ async function speakNow(message, { onDuration } = {}) {
   if (!total) return { samples: 0, voice };
 
   onDuration?.(Math.round((total / (player.sampleRate || 48000)) * 1000));
+
+  // Muted (preview): keep the visual timing, skip only the audio output.
+  if (isMuted()) return { samples: total, voice };
 
   await player.drainAndPlay(buffers);
   return { samples: total, voice };

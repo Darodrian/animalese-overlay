@@ -269,34 +269,6 @@
         </section>
 
         <section>
-          <h2>Chat command</h2>
-          <table>
-            <tr>
-              <td class="k">Prefix</td>
-              <td class="val" id="cPrefix">&ndash;</td>
-            </tr>
-            <tr>
-              <td class="k">Cooldown</td>
-              <td class="val" id="cCooldown">&ndash;</td>
-            </tr>
-            <tr>
-              <td class="k">Max length</td>
-              <td class="val" id="cMaxLen">&ndash;</td>
-            </tr>
-          </table>
-          <ol>
-            <li><code>!ac hello</code> &mdash; random villager</li>
-            <li><code>!ac Ribbot hello</code> &mdash; Ribbot specifically</li>
-            <li><code>!ac</code> &mdash; random villager's catchphrase</li>
-          </ol>
-          <p class="sub" style="margin: 0.7rem 0 0">
-            In OBS, add a Browser Source and press <strong>Copy OBS URL</strong> above, then paste it as
-            the source URL. Then 1280&times;720, 60&nbsp;fps, tick <strong>Control audio via OBS</strong>,
-            then Audio&nbsp;Mixer &rarr; Browser&nbsp;Source &rarr; Monitor&nbsp;=&nbsp;<strong>Monitor</strong>.
-          </p>
-        </section>
-
-        <section>
           <h2>Permissions &amp; limits</h2>
           <label class="chk"><input type="checkbox" data-perm="broadcaster" /> Broadcaster</label>
           <label class="chk"><input type="checkbox" data-perm="mod" /> Mods</label>
@@ -323,12 +295,43 @@
           </div>
           <p class="note" id="saveNote"></p>
         </section>
+
+        <section>
+          <h2>Chat command</h2>
+          <table>
+            <tr>
+              <td class="k">Prefix</td>
+              <td class="val" id="cPrefix">&ndash;</td>
+            </tr>
+            <tr>
+              <td class="k">Cooldown</td>
+              <td class="val" id="cCooldown">&ndash;</td>
+            </tr>
+            <tr>
+              <td class="k">Max length</td>
+              <td class="val" id="cMaxLen">&ndash;</td>
+            </tr>
+          </table>
+          <ol>
+            <li><code>!ac hello</code> &mdash; random villager</li>
+            <li><code>!ac Ribbot hello</code> &mdash; Ribbot specifically</li>
+            <li><code>!ac</code> &mdash; random villager's catchphrase</li>
+          </ol>
+          <p class="sub" style="margin: 0.7rem 0 0">
+            In OBS, add a Browser Source and press <strong>Copy OBS URL</strong> above, then paste it as
+            the source URL. Then 1280&times;720, 60&nbsp;fps, tick <strong>Control audio via OBS</strong>,
+            then Audio&nbsp;Mixer &rarr; Browser&nbsp;Source &rarr; Monitor&nbsp;=&nbsp;<strong>Monitor</strong>.
+          </p>
+        </section>
       </div>
 
       <div class="col">
         <section>
           <h2>Preview</h2>
           <div id="preview-shell"><iframe id="preview" title="Overlay preview" hidden></iframe></div>
+          <label class="chk" style="margin-top: 0.6rem"
+            ><input type="checkbox" id="previewMute" /> Mute</label
+          >
           <p class="note" id="preview-note">Generate a key to see here the same overlay you put in OBS.</p>
         </section>
 

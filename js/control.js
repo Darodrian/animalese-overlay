@@ -1,5 +1,5 @@
 import { savedChannel, saveChannel, savedKey, saveKey, hasKey, generateKey, adoptHashParams, overlayUrl } from './keys.js';
-import { DEFAULT_SETTINGS, cfgStore } from './config.js';
+import { DEFAULT_SETTINGS, cfgStore, PREVIEW_MUTE_STORE } from './config.js';
 import { loadRoster } from './roster.js';
 import { createBridge } from './bridge.js';
 
@@ -52,9 +52,32 @@ function showKey() {
   $('btn-key').textContent = has ? 'Change key' : 'Generate key';
 }
 
+function previewMuted() {
+  try {
+    return localStorage.getItem(PREVIEW_MUTE_STORE) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function persistPreviewMuted(v) {
+  try {
+    localStorage.setItem(PREVIEW_MUTE_STORE, v ? '1' : '0');
+  } catch {
+    // modo privado
+  }
+}
+
+function syncPreviewMute() {
+  $('preview').contentWindow?.postMessage(
+    { type: 'preview-mute', muted: $('previewMute').checked },
+    '*',
+  );
+}
+
 function updatePreview() {
   if (channel && key) {
-    $('preview').src = overlayUrl(channel, key);
+    $('preview').src = overlayUrl(channel, key) + (previewMuted() ? '&mute=1' : '');
     $('preview').hidden = false;
     $('preview-note').textContent = 'Live preview: what you see here is what OBS shows.';
   } else {
@@ -62,6 +85,13 @@ function updatePreview() {
     $('preview-note').textContent = 'Generate a key to see here the same overlay you put in OBS.';
   }
 }
+
+$('previewMute').checked = previewMuted();
+$('previewMute').addEventListener('change', () => {
+  persistPreviewMuted($('previewMute').checked);
+  syncPreviewMute();
+});
+$('preview').addEventListener('load', syncPreviewMute);
 
 async function copyText(text) {
   try {

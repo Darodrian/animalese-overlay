@@ -5,6 +5,7 @@ export const SUPABASE_URL = 'https://liuhcwkpuivcletiwpab.supabase.co';
 export const SUPABASE_KEY = 'sb_publishable_YenbmLGW94t6XHVXgZx0DQ_e2XjL6tC';
 
 export const CHANNEL_STORE = 'ac_channel';
+export const PREVIEW_MUTE_STORE = 'ac_preview_muted';
 
 const norm = (v) => String(v ?? '').trim().toLowerCase();
 
