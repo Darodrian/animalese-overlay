@@ -52,7 +52,7 @@ let bridge = null;
 let jobSeq = 0;
 
 const queue = createQueue({ minGapMs: 1200, onJob });
-
+try { console.log('[overlay] module init ok'); } catch(e) {}
 const { channel, key } = overlayParams(location.hash);
 if (!key) showSetup('missing-key');
 else if (!channel) showSetup('missing-channel');
