@@ -79,9 +79,13 @@ function updatePreview() {
   if (channel && key) {
     $('preview').src = overlayUrl(channel, key) + (previewMuted() ? '&mute=1' : '');
     $('preview').hidden = false;
+    // Algunos navegadores bloquean el audio del iframe hasta el primer click.
+    // El aviso se oculta solo si el overlay reporta el audio corriendo.
+    $('preview-hint').hidden = false;
     $('preview-note').textContent = 'Live preview: what you see here is what OBS shows.';
   } else {
     $('preview').hidden = true;
+    $('preview-hint').hidden = true;
     $('preview-note').textContent = 'Generate a key to see here the same overlay you put in OBS.';
   }
 }
@@ -234,6 +238,7 @@ function renderState(payload) {
   setDot('live', 'Overlay connected');
 
   const audio = payload.audio ?? 'unknown';
+  if (audio === 'running') $('preview-hint').hidden = true;
   $('sAudio').innerHTML =
     audio === 'running' ? good('running') : bad(`${audio} — no sound will play`);
 
