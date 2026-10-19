@@ -38,11 +38,24 @@
         margin: 0.2rem 0 1.4rem;
         color: #a89c8c;
       }
-      .grid {
+      .wrap {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
-        gap: 1rem;
+        grid-template-columns: 340px 1fr;
+        gap: 18px;
+        max-width: 1100px;
+        margin: 1.2rem auto 0;
         align-items: start;
+      }
+      @media (max-width: 860px) {
+        .wrap {
+          grid-template-columns: 1fr;
+        }
+      }
+      .col {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        min-width: 0;
       }
       section {
         background: var(--panel);
@@ -220,117 +233,123 @@
     </style>
   </head>
   <body>
-    <h1>Animalese Overlay &mdash; control</h1>
-    <div class="status"><span class="dot" id="dot-ov"></span><span id="status-ov">No room yet</span></div>
-    <div class="msg" id="msg" hidden></div>
-
-    <div class="grid" style="margin-top: 1.2rem">
-      <section>
-        <h2>Setup</h2>
-        <div class="field">
-          <span>Twitch channel</span>
-          <input id="channel" spellcheck="false" placeholder="yourusername" />
-        </div>
-        <div class="keybar">
-          <span>Key: <em class="none" id="keynone">not generated</em><code id="keyval" hidden></code></span>
-          <button type="button" id="btn-copy" disabled>Copy OBS URL</button>
-          <button type="button" id="btn-key">Generate key</button>
-        </div>
-      </section>
-
-      <section>
-        <h2>Preview</h2>
-        <div id="preview-shell"><iframe id="preview" title="Overlay preview" hidden></iframe></div>
-        <p class="note" id="preview-note">Generate a key to see here the same overlay you put in OBS.</p>
-      </section>
-
-      <section>
-        <h2>Status</h2>
-        <table>
-          <tr>
-            <td class="k">Audio context</td>
-            <td class="val" id="sAudio">&ndash;</td>
-          </tr>
-          <tr>
-            <td class="k">Queue</td>
-            <td class="val" id="sQueue">&ndash;</td>
-          </tr>
-        </table>
-      </section>
-
-      <section>
-        <h2>Say something</h2>
-        <div class="field">
-          <span>Villager</span>
-          <select id="cVillager">
-            <option value="">Random</option>
-          </select>
-        </div>
-        <div class="field">
-          <span>Message (empty = that villager's catchphrase)</span>
-          <input id="cMessage" placeholder="welcome to the island" />
-        </div>
-        <div class="row">
-          <button id="cSay">Send to overlay</button>
-        </div>
-        <p class="note" id="sayNote"></p>
-      </section>
-
-      <section>
-        <h2>Chat command</h2>
-        <table>
-          <tr>
-            <td class="k">Prefix</td>
-            <td class="val" id="cPrefix">&ndash;</td>
-          </tr>
-          <tr>
-            <td class="k">Cooldown</td>
-            <td class="val" id="cCooldown">&ndash;</td>
-          </tr>
-          <tr>
-            <td class="k">Max length</td>
-            <td class="val" id="cMaxLen">&ndash;</td>
-          </tr>
-        </table>
-        <ol>
-          <li><code>!ac hello</code> &mdash; random villager</li>
-          <li><code>!ac Ribbot hello</code> &mdash; Ribbot specifically</li>
-          <li><code>!ac</code> &mdash; random villager's catchphrase</li>
-        </ol>
-        <p class="sub" style="margin: 0.7rem 0 0">
-          In OBS, add a Browser Source and press <strong>Copy OBS URL</strong> above, then paste it as
-          the source URL. Then 1280&times;720, 60&nbsp;fps, tick <strong>Control audio via OBS</strong>,
-          then Audio&nbsp;Mixer &rarr; Browser&nbsp;Source &rarr; Monitor&nbsp;=&nbsp;<strong>Monitor</strong>.
-        </p>
-      </section>
-
-      <section>
-        <h2>Permissions &amp; limits</h2>
-        <label class="chk"><input type="checkbox" data-perm="broadcaster" /> Broadcaster</label>
-        <label class="chk"><input type="checkbox" data-perm="mod" /> Mods</label>
-        <label class="chk"><input type="checkbox" data-perm="vip" /> VIPs</label>
-        <label class="chk"><input type="checkbox" data-perm="subscriber" /> Subscribers</label>
-        <label class="chk"><input type="checkbox" data-perm="everyone" /> Everyone</label>
-
-        <div class="field" style="margin-top: 0.9rem">
-          <span>User cooldown (s)</span>
-          <input id="vCooldown" type="number" min="0" step="5" />
+    <div class="wrap">
+      <div class="col">
+        <div class="head">
+          <h1>Animalese Overlay &mdash; control</h1>
+          <div class="status"><span class="dot" id="dot-ov"></span><span id="status-ov">No room yet</span></div>
+          <div class="msg" id="msg" hidden></div>
         </div>
 
-        <div class="field" style="margin-top: 0.6rem">
-          <span>Max message length (chars)</span>
-          <input id="vMaxLen" type="number" min="1" max="500" step="1" />
-        </div>
+        <section>
+          <h2>Setup</h2>
+          <div class="field">
+            <span>Twitch channel</span>
+            <input id="channel" spellcheck="false" placeholder="yourusername" />
+          </div>
+          <div class="keybar">
+            <span>Key: <em class="none" id="keynone">not generated</em><code id="keyval" hidden></code></span>
+            <button type="button" id="btn-copy" disabled>Copy OBS URL</button>
+            <button type="button" id="btn-key">Generate key</button>
+          </div>
+        </section>
 
-        <label class="chk" style="margin-top: 0.6rem"
-          ><input type="checkbox" id="vPortrait" /> Only villagers with portraits</label
-        >
+        <section>
+          <h2>Status</h2>
+          <table>
+            <tr>
+              <td class="k">Audio context</td>
+              <td class="val" id="sAudio">&ndash;</td>
+            </tr>
+            <tr>
+              <td class="k">Queue</td>
+              <td class="val" id="sQueue">&ndash;</td>
+            </tr>
+          </table>
+        </section>
 
-        <div class="row">
-          <button id="save">Save settings</button>
-        </div>
-        <p class="note" id="saveNote"></p>
-      </section>
+        <section>
+          <h2>Chat command</h2>
+          <table>
+            <tr>
+              <td class="k">Prefix</td>
+              <td class="val" id="cPrefix">&ndash;</td>
+            </tr>
+            <tr>
+              <td class="k">Cooldown</td>
+              <td class="val" id="cCooldown">&ndash;</td>
+            </tr>
+            <tr>
+              <td class="k">Max length</td>
+              <td class="val" id="cMaxLen">&ndash;</td>
+            </tr>
+          </table>
+          <ol>
+            <li><code>!ac hello</code> &mdash; random villager</li>
+            <li><code>!ac Ribbot hello</code> &mdash; Ribbot specifically</li>
+            <li><code>!ac</code> &mdash; random villager's catchphrase</li>
+          </ol>
+          <p class="sub" style="margin: 0.7rem 0 0">
+            In OBS, add a Browser Source and press <strong>Copy OBS URL</strong> above, then paste it as
+            the source URL. Then 1280&times;720, 60&nbsp;fps, tick <strong>Control audio via OBS</strong>,
+            then Audio&nbsp;Mixer &rarr; Browser&nbsp;Source &rarr; Monitor&nbsp;=&nbsp;<strong>Monitor</strong>.
+          </p>
+        </section>
+
+        <section>
+          <h2>Permissions &amp; limits</h2>
+          <label class="chk"><input type="checkbox" data-perm="broadcaster" /> Broadcaster</label>
+          <label class="chk"><input type="checkbox" data-perm="mod" /> Mods</label>
+          <label class="chk"><input type="checkbox" data-perm="vip" /> VIPs</label>
+          <label class="chk"><input type="checkbox" data-perm="subscriber" /> Subscribers</label>
+          <label class="chk"><input type="checkbox" data-perm="everyone" /> Everyone</label>
+
+          <div class="field" style="margin-top: 0.9rem">
+            <span>User cooldown (s)</span>
+            <input id="vCooldown" type="number" min="0" step="5" />
+          </div>
+
+          <div class="field" style="margin-top: 0.6rem">
+            <span>Max message length (chars)</span>
+            <input id="vMaxLen" type="number" min="1" max="500" step="1" />
+          </div>
+
+          <label class="chk" style="margin-top: 0.6rem"
+            ><input type="checkbox" id="vPortrait" /> Only villagers with portraits</label
+          >
+
+          <div class="row">
+            <button id="save">Save settings</button>
+          </div>
+          <p class="note" id="saveNote"></p>
+        </section>
+      </div>
+
+      <div class="col">
+        <section>
+          <h2>Preview</h2>
+          <div id="preview-shell"><iframe id="preview" title="Overlay preview" hidden></iframe></div>
+          <p class="note" id="preview-note">Generate a key to see here the same overlay you put in OBS.</p>
+        </section>
+
+        <section>
+          <h2>Say something</h2>
+          <div class="field">
+            <span>Villager</span>
+            <select id="cVillager">
+              <option value="">Random</option>
+            </select>
+          </div>
+          <div class="field">
+            <span>Message (empty = that villager's catchphrase)</span>
+            <input id="cMessage" placeholder="welcome to the island" />
+          </div>
+          <div class="row">
+            <button id="cSay">Send to overlay</button>
+          </div>
+          <p class="note" id="sayNote"></p>
+        </section>
+      </div>
     </div>
 
     <script type="module" src="js/control.js"></script>
