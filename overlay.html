@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <title>Animalese Overlay</title>
-    <link rel="stylesheet" href="/css/overlay.css" />
+    <link rel="stylesheet" href="css/overlay.css" />
   </head>
   <body>
     <div id="setup">
-      <div class="headline">Add <code>?channel=yourusername</code> in the URL</div>
-      <div class="detail">Then the overlay can read your Twitch chat and pick a villager.</div>
+      <div class="headline" id="setup-headline"></div>
+      <div class="detail" id="setup-detail"></div>
     </div>
 
     <div id="stage">
@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <script src="/vendor/comfy.min.js"></script>
-    <script type="module" src="/js/overlay.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/comfy.js@1.1.29/dist/comfy.min.js"></script>
+    <script type="module" src="js/overlay.js"></script>
   </body>
 </html>

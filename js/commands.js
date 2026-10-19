@@ -1,4 +1,4 @@
-import { findVillager, randomVillager } from './nookipedia.js';
+import { findVillager, randomVillager } from './roster.js';
 
 const URL_RE = /\bhttps?:\/\/\S+/gi;
 const MENTION_RE = /@\w+/g;
@@ -25,7 +25,7 @@ export function isAllowed(flags = {}, permissions = {}) {
 }
 
 export function parseCommand(rawText, villagers, config, { exclude = null } = {}) {
-  const { maxLength } = config.command;
+  const maxLength = config.maxLength;
   const requirePortrait = Boolean(config.requirePortrait);
   const text = sanitiseText(rawText, maxLength);
 
@@ -36,8 +36,7 @@ export function parseCommand(rawText, villagers, config, { exclude = null } = {}
     return { ok: false, reason: 'no-portrait' };
   }
 
-  const villager =
-    named ?? randomVillager(villagers, { requirePortrait, exclude });
+  const villager = named ?? randomVillager(villagers, { requirePortrait, exclude });
   if (!villager) return { ok: false, reason: 'no-villagers' };
 
   let message = named ? rest.join(' ').trim() : text;
@@ -67,8 +66,19 @@ export function holdMsFor(message) {
 export function createQueue({ minGapMs = 0, onJob, onIdle } = {}) {
   const pending = [];
   const cooldowns = new Map();
+  let gapMs = minGapMs;
   let draining = false;
   let timer = null;
+  let timerDelay = 0;
+  let timerSetAt = 0;
+  let current = null;
+
+  function finishCurrent() {
+    draining = false;
+    current = null;
+    timer = null;
+    pump();
+  }
 
   function pump() {
     if (draining) return;
@@ -78,13 +88,12 @@ export function createQueue({ minGapMs = 0, onJob, onIdle } = {}) {
       return;
     }
     draining = true;
+    current = next;
     onIdle?.(pending.length);
     onJob?.(next);
-    timer = setTimeout(() => {
-      draining = false;
-      timer = null;
-      pump();
-    }, Math.max(next.holdMs, minGapMs));
+    timerDelay = Math.max(next.holdMs ?? 0, gapMs);
+    timerSetAt = Date.now();
+    timer = setTimeout(finishCurrent, timerDelay);
   }
 
   return {
@@ -102,17 +111,34 @@ export function createQueue({ minGapMs = 0, onJob, onIdle } = {}) {
     markUsed(user, windowMs) {
       cooldowns.set(String(user).toLowerCase(), Date.now() + windowMs);
     },
+    setMinGap(ms) {
+      gapMs = ms;
+      // acorta el timer en vuelo si el nuevo hueco ya permite arrancar
+      if (draining && timer !== null) {
+        const elapsed = Date.now() - timerSetAt;
+        const remainingHold = Math.max(0, (current?.holdMs ?? 0) - elapsed);
+        const delay = Math.max(remainingHold, ms);
+        if (delay < timerDelay - elapsed) {
+          clearTimeout(timer);
+          timerDelay = delay;
+          timerSetAt = Date.now();
+          timer = setTimeout(finishCurrent, delay);
+        }
+      }
+    },
     snapshot() {
+      const shape = (j) => ({ user: j.user, villager: j.villager?.name, message: j.message });
       return {
         playing: draining,
         pending: pending.length,
-        items: pending.map((j) => ({ user: j.user, villager: j.villager.name, message: j.message })),
+        items: [...(current ? [shape(current)] : []), ...pending.map(shape)],
       };
     },
     stop() {
       if (timer) clearTimeout(timer);
       timer = null;
       draining = false;
+      current = null;
       pending.length = 0;
     },
   };
