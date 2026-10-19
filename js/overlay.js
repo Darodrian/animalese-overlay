@@ -22,7 +22,7 @@ const SETUP_REASONS = {
   'missing-key': {
     headline: 'This overlay needs its key',
     detail:
-      'Open the dashboard, generate a key for your channel, then use Copy OBS URL ÔÇö every streamer has their own room.',
+      'Open the dashboard, generate a key for your channel, then use Copy OBS URL ï¿½ï¿½ï¿½ every streamer has their own room.',
   },
   'missing-channel': {
     headline: 'This overlay needs your channel',
@@ -145,6 +145,15 @@ async function connectRoom(roomKey) {
       cacheSettings(channel, live);
       console.log('[overlay] settings updated from dashboard');
     });
+    b.onSay((payload = {}) => {
+      console.log('[overlay] say received from dashboard');
+      enqueueSay({
+        user: payload.user ?? 'control',
+        text: payload.text ?? '',
+        flags: payload.flags ?? { broadcaster: true },
+        villagerName: payload.villagerName ?? null,
+      });
+    });
     await b.connect();
     bridge = b;
     b.sendHello({ at: Date.now() });
@@ -173,7 +182,7 @@ function enqueueSay({ user, text, flags = {}, villagerName = null, excludeVillag
   }
 
   const remaining = queue.cooldownRemaining(userKey);
-  if (remaining > 0) {
+  if (remaining > 0 && userKey !== 'control') {
     console.log(`[overlay] ${user} on cooldown (${Math.ceil(remaining / 1000)}s)`);
     return false;
   }
