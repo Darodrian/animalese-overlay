@@ -396,7 +396,7 @@ async function onJob(job) {
   hideTimer = setTimeout(() => {
     card.classList.remove('show');
     portrait.classList.remove('shake');
-  }, 1700);
+  }, 3000);
 }
 
 // El retrato fallo: pide otro al aldeano sin retrato; si la cola lo rechaza,
