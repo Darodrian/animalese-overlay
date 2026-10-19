@@ -22,7 +22,7 @@ const SETUP_REASONS = {
   'missing-key': {
     headline: 'This overlay needs its key',
     detail:
-      'Open the dashboard, generate a key for your channel, then use Copy OBS URL â€” every streamer has their own room.',
+      'Open the dashboard, generate a key for your channel, then use Copy OBS URL Ã¢â‚¬â€ every streamer has their own room.',
   },
   'missing-channel': {
     headline: 'This overlay needs your channel',
@@ -46,7 +46,14 @@ function showSetup(reason) {
   document.title = `Animalese Overlay - ${reason}`;
 }
 const num = (v, def) => (Number.isFinite(Number(v)) ? Number(v) : def);
+let live = null;
+let roster = null;
+let bridge = null;
+let jobSeq = 0;
 
+const queue = createQueue({ minGapMs: 1200, onJob });
+
+async function boot(channelName, roomKey) {
 const { channel, key } = overlayParams(location.hash);
 if (!key) showSetup('missing-key');
 else if (!channel) showSetup('missing-channel');
@@ -55,8 +62,6 @@ else if (!validateKey(key)) showSetup('invalid-key');
 else boot(channel, key);
 
 // ---- ajustes en vivo ----
-
-
 // Merge por clave de primer nivel sobre DEFAULT_SETTINGS; permissions en particular;
 // las claves desconocidas se descartan (misma semantica que el deepMerge del servidor).
 function mergeSettings(raw) {
@@ -96,14 +101,6 @@ function cacheSettings(channelName, settings) {
 
 // ---- estado ----
 
-let live = null;
-let roster = null;
-let bridge = null;
-let jobSeq = 0;
-
-const queue = createQueue({ minGapMs: 1200, onJob });
-
-async function boot(channelName, roomKey) {
   live = mergeSettings(readCachedSettings(channelName));
   queue.setMinGap(live.minGapMs);
 
