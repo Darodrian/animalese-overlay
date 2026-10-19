@@ -1,5 +1,5 @@
 const RANGES = {
-  pitch: [1.0, 2.0],
+  pitch: [0.5, 3.0],
   speed: [3.3, 4.5],
   randomness: [0.05, 0.15],
   melodyRate: [0.03, 0.08],
@@ -7,8 +7,6 @@ const RANGES = {
   spaceDelay: [0.02, 0.05],
   punctuationDelay: [0.2, 0.4],
 };
-
-const MIN_KEPT = 0.3;
 
 const DEFAULT_PUNCTUATIONS = [
   '.', ',', '!', '?', "'", '"', '(', ')', '~',
@@ -38,24 +36,8 @@ const SAFE = {
 };
 
 export function drawVoice() {
-  let pitch = draw(SAFE.pitch);
-  let speed = draw(SAFE.speed);
-
-  if (pitch / speed < MIN_KEPT) {
-    for (let attempt = 0; attempt < 12; attempt++) {
-      const p = draw(SAFE.pitch);
-      const s = draw(SAFE.speed);
-      if (p / s >= MIN_KEPT) {
-        pitch = p;
-        speed = s;
-        break;
-      }
-    }
-    if (pitch / speed < MIN_KEPT) {
-      pitch = 1.5;
-      speed = 4;
-    }
-  }
+  const pitch = draw(SAFE.pitch);
+  const speed = draw(SAFE.speed);
 
   return {
     pitch: round(pitch),
