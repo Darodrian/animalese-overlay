@@ -105,6 +105,7 @@ function cacheSettings(channelName, settings) {
 
 async function boot(channelName, roomKey) {
   try { console.log('[overlay] boot starting', channelName); } catch(e) {}
+  live = mergeSettings(readCachedSettings(channelName));
   queue.setMinGap(live.minGapMs);
 
   await unlockAudio();
@@ -141,7 +142,8 @@ async function connectRoom(roomKey) {
     const b = createBridge(roomKey);
     b.onSet(({ settings }) => {
       live = mergeSettings(settings);
-      queue.setMinGap(live.minGapMs);
+  live = mergeSettings(readCachedSettings(channelName));
+  queue.setMinGap(live.minGapMs);
       cacheSettings(channel, live);
       console.log('[overlay] settings updated from dashboard');
     });
