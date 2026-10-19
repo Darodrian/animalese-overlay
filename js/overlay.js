@@ -22,7 +22,7 @@ const SETUP_REASONS = {
   'missing-key': {
     headline: 'This overlay needs its key',
     detail:
-      'Open the dashboard, generate a key for your channel, then use Copy OBS URL — every streamer has their own room.',
+      'Open the dashboard, generate a key for your channel, then use Copy OBS URL â€” every streamer has their own room.',
   },
   'missing-channel': {
     headline: 'This overlay needs your channel',
@@ -45,6 +45,7 @@ function showSetup(reason) {
   $('setup').classList.add('show');
   document.title = `Animalese Overlay - ${reason}`;
 }
+const num = (v, def) => (Number.isFinite(Number(v)) ? Number(v) : def);
 
 const { channel, key } = overlayParams(location.hash);
 if (!key) showSetup('missing-key');
@@ -55,7 +56,6 @@ else boot(channel, key);
 
 // ---- ajustes en vivo ----
 
-const num = (v, def) => (Number.isFinite(Number(v)) ? Number(v) : def);
 
 // Merge por clave de primer nivel sobre DEFAULT_SETTINGS; permissions en particular;
 // las claves desconocidas se descartan (misma semantica que el deepMerge del servidor).
