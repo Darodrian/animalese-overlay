@@ -22,7 +22,7 @@ const SETUP_REASONS = {
   'missing-key': {
     headline: 'This overlay needs its key',
     detail:
-      'Open the dashboard, generate a key for your channel, then use Copy OBS URL Ã¢â‚¬â€ every streamer has their own room.',
+      'Open the dashboard, generate a key for your channel, then use Copy OBS URL Ã”Ã‡Ã¶ every streamer has their own room.',
   },
   'missing-channel': {
     headline: 'This overlay needs your channel',
@@ -53,7 +53,6 @@ let jobSeq = 0;
 
 const queue = createQueue({ minGapMs: 1200, onJob });
 
-async function boot(channelName, roomKey) {
 const { channel, key } = overlayParams(location.hash);
 if (!key) showSetup('missing-key');
 else if (!channel) showSetup('missing-channel');
@@ -62,6 +61,8 @@ else if (!validateKey(key)) showSetup('invalid-key');
 else boot(channel, key);
 
 // ---- ajustes en vivo ----
+
+
 // Merge por clave de primer nivel sobre DEFAULT_SETTINGS; permissions en particular;
 // las claves desconocidas se descartan (misma semantica que el deepMerge del servidor).
 function mergeSettings(raw) {
@@ -101,6 +102,8 @@ function cacheSettings(channelName, settings) {
 
 // ---- estado ----
 
+
+async function boot(channelName, roomKey) {
   live = mergeSettings(readCachedSettings(channelName));
   queue.setMinGap(live.minGapMs);
 
@@ -380,7 +383,7 @@ async function onJob(job) {
 }
 
 // El retrato fallo: pide otro al aldeano sin retrato; si la cola lo rechaza,
-// cae al render sin retrato (el viejo fallback cuando el reemplazo no llega).
+// cae al render sin retrato (el viejo fallback de /api/say con !ok).
 function requestReplacement(job) {
   return enqueueSay({
     user: job.user,
